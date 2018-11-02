@@ -37,6 +37,8 @@ router.post('/login',async(req, res) => {
     const data = await Users.findOne({username,password:md5(password)});
     if(data) {
       //说明用户找到了，登录成功，返回成功响应
+      //返回cookie
+      res.cookie('userid', data.id, {maxAge: 1000 * 3600 * 24 * 7});
       res.json ({
         "code":0,
         "data":{
@@ -85,6 +87,8 @@ router.post('/register',async(req, res) => {
     } else {
       const data = await Users.create({username,password:md5(password),type});
       //返回成功的响应
+      res.cookie('userid', data.id, {maxAge: 1000 * 3600 * 24 * 7});
+
       res.json({
         code:0,
         data:{
